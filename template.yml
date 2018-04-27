@@ -1,0 +1,54 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: A simple webhook troubleshooting endpoint that stores data in S3
+Parameters:
+  bucketName:
+    Description: S3 bucket to store webhook data
+    Type: String
+
+  bucketPrefix:
+    Description: S3 bucket prefix
+    Type: String
+    Default: guarana
+
+Resources:
+  Guarana:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: target/guarana-1.0-SNAPSHOT.jar
+      FunctionName: Guarana-Webhook-Handler
+      Handler: com.uvasoftware.guarana.Handler
+      Runtime: java8
+      MemorySize: 256
+      Policies: AWSLambdaBasicExecutionRole
+      Timeout: 60
+      Description: Webhook capture
+      AutoPublishAlias: live
+      Environment:
+        Variables:
+          DESTINATION_BUCKET: !Sub ${bucketName}
+          # default prefix for all objects stored in the above bucket:
+          DESTINATION_BUCKET_PREFIX: !Sub ${bucketPrefix}
+
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - 's3:PutObject'
+              Resource: !Sub 'arn:aws:s3:::${bucketName}/${bucketPrefix}/*'
+
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: any
+
+Outputs:
+    ApiURL:
+      Description: "API endpoint URL for Prod environment"
+      Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+
+
+
