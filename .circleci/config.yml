@@ -1,0 +1,74 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/ci
+    docker:
+      - image: debian:stretch
+
+    steps:
+      - run: apt-get update -qq && apt-get install -qqy git unzip ssh ca-certificates tar gzip
+      - checkout
+
+      - restore_cache:
+          keys:
+            - m2-{{ checksum "pom.xml" }}
+            - m2-
+
+      - run:
+          name: Building
+          command: bash ./.circleci/build.sh
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: m2-{{ checksum "pom.xml" }}
+
+  deploy:
+    working_directory: ~/ci
+    docker:
+      - image: debian:stretch
+
+    steps:
+      - run: apt-get update -qq && apt-get install -qqy git unzip ssh ca-certificates tar gzip
+      - checkout
+      - setup_remote_docker
+
+      - attach_workspace:
+          at: ~/ci
+
+      - run:
+          name: Deploying
+          command: bash ./.circleci/deploy.sh
+
+  deploy_finish:
+    working_directory: ~/ci
+    docker:
+      - image: debian:stretch
+
+    steps:
+      - run: apt-get update -qq && apt-get install -qqy git unzip ssh ca-certificates tar gzip
+      - checkout
+      - setup_remote_docker
+
+      - attach_workspace:
+          at: ~/ci
+
+      - run:
+          name: Deploying
+          command: bash ./.circleci/deploy-finish.sh
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build:
+        filters:
+          branches:
+            ignore: master
+
+      - deploy:
+          requires:
+            - build
+          filters:
+              branches:
+                  only: master
