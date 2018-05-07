@@ -24,7 +24,7 @@ cd ~/ci
 mvn -q build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion} versions:commit
 
 # building
-mvn -q -DskipTests clean package dependency:go-offline
+mvn -q -DskipTests clean package
 
 # SAM packaging
 sam package --s3-bucket scanii --s3-prefix sam/guarana  --template-file template.yml --output-template-file guarana.yaml || exit 1

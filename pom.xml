@@ -36,6 +36,8 @@
                                     <exclude>log4j:log4j:jar:</exclude>
                                 </excludes>
                             </artifactSet>
+                            <!--we force a simple jar name to easily reference it in the SAM template -->
+                            <finalName>${project.name}</finalName>
                         </configuration>
                     </execution>
                 </executions>

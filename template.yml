@@ -15,7 +15,7 @@ Resources:
   Guarana:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: target/guarana-1.0-SNAPSHOT.jar
+      CodeUri: target/guarana.jar
       FunctionName: Guarana-Webhook-Handler
       Handler: com.uvasoftware.guarana.Handler
       Runtime: java8
