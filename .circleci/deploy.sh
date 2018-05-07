@@ -12,6 +12,9 @@ mv apache-maven-3.5.2/ /opt
 ln -sf /opt/apache-maven-3.5.2/bin/mvn /usr/local/bin/
 rm -rf /tmp/*
 
+wget https://github.com/awslabs/aws-sam-local/releases/download/v0.2.11/sam_0.2.11_linux_386.deb
+dpkg -i sam_0.2.11_linux_386.deb
+
 cd ~/ci
 
 # removing snapshot marker:
@@ -21,8 +24,8 @@ mvn -q build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.maj
 mvn -q -DskipTests clean package dependency:go-offline
 
 # SAM packaging
-sam package --s3-bucket scanii --s3-prefix sam/guarana  --template-file template.yml --output-template-file guarana.yaml
-git add -f guarana.yaml
+sam package --s3-bucket scanii --s3-prefix sam/guarana  --template-file template.yml --output-template-file guarana.yaml || exit 1
+git add -f guarana.yaml || exit 2
 
 VERSION=$(grep \<version\> pom.xml | xargs | awk -F '[<>]' '{ print $3}')
 
