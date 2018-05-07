@@ -26,6 +26,8 @@ mvn -q build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.maj
 # building
 mvn -q -DskipTests clean package
 
+ls -lha target/*
+
 # SAM packaging
 sam package --s3-bucket scanii --s3-prefix sam/guarana  --template-file template.yml --output-template-file guarana.yaml || exit 1
 git add -f guarana.yaml || exit 2
