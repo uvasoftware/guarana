@@ -1,9 +1,9 @@
 # Guarana
-Guarana is a [SAM](https://github.com/awslabs/serverless-application-model) packaged webhook debugging tool, it captures HTTP requests and saves them kindly to S3.
+Guarana is a [SAM](https://github.com/awslabs/serverless-application-model) packaged webhook debugging tool, it captures HTTP requests and saves them kindly to S3 to help you review/debug them later. 
 
 ## Using it 
 
-```sam deploy --template-file guarana.yaml --stack-name guarana --parameter-overrides bucketName=scanii-test --capabilities CAPABILITY_IAM```
+```sam deploy --template-file guarana.yaml --stack-name guarana --parameter-overrides bucketName=$YOUR_BUCKET_NAME --capabilities CAPABILITY_IAM```
 
 Important config options: 
 * bucketName: the name of the bucket in which to store the webhook data
