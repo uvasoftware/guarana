@@ -12,8 +12,8 @@ mv apache-maven-3.5.2/ /opt
 ln -sf /opt/apache-maven-3.5.2/bin/mvn /usr/local/bin/
 rm -rf /tmp/*
 
-wget https://github.com/awslabs/aws-sam-local/releases/download/v0.2.11/sam_0.2.11_linux_386.deb
-dpkg -i sam_0.2.11_linux_386.deb
+wget https://github.com/awslabs/aws-sam-local/releases/download/v0.2.11/sam_0.2.11_linux_amd64.deb
+dpkg -i sam_0.2.11_linux_amd64.deb
 
 cd ~/ci
 
