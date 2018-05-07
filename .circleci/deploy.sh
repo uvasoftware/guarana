@@ -15,6 +15,9 @@ rm -rf /tmp/*
 wget https://github.com/awslabs/aws-sam-local/releases/download/v0.2.11/sam_0.2.11_linux_amd64.deb
 dpkg -i sam_0.2.11_linux_amd64.deb
 
+# installing AWS CLI
+apt-get install -qqy python-pip && pip install awscli
+
 cd ~/ci
 
 # removing snapshot marker:
