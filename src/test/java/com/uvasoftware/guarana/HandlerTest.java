@@ -2,6 +2,7 @@ package com.uvasoftware.guarana;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -139,5 +140,12 @@ class HandlerTest {
         LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
 
         verify(persister, times(1)).persist(eq("guarana/Prod/test/" + formatter.format(now) + "/1234/metadata.json"), anyString());
+    }
+
+    @Test
+    void shouldThrowExceptionIfNoBucket() {
+        Assertions.assertThrows(IllegalStateException.class, ()->{
+            Handler handler = new Handler();
+        });
     }
 }

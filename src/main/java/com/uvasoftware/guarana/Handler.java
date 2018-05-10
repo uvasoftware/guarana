@@ -25,13 +25,12 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
     private String prefix = "guarana";
     private ObjectMapper objectMapper;
 
-
+    @SuppressWarnings("unused")
     public Handler() {
         bucketName = System.getenv(BUCKET_NAME);
         if (bucketName == null) {
-            System.err.println("Destination bucket variable not set, please set: " + BUCKET_NAME);
-            System.exit(2);
-        }
+            throw new IllegalStateException("Destination bucket variable not set, please set: " + BUCKET_NAME);
+         }
 
         initialize();
         persister = new S3BucketPublisher(bucketName);
