@@ -34,7 +34,7 @@ Resources:
 
       Policies:
         - S3CrudPolicy:
-            BucketName: !Sub '${bucketName}/${bucketPrefix}'
+            BucketName: !Sub '${bucketName}'
 
       Events:
         GetResource:
