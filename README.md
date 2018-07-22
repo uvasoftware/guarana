@@ -1,23 +1,25 @@
 # Guarana
-Guarana is a [SAM](https://github.com/awslabs/serverless-application-model) packaged webhook debugging tool, it captures HTTP requests and saves them kindly to S3 to help you review/debug them later. 
+Guarana is a [SAM](https://github.com/awslabs/serverless-application-model) packaged [webhook](https://en.wikipedia.org/wiki/Webhook) debugging tool, it captures HTTP requests and saves them Kindly to S3 to help you review/debug them later.
 
-## Using it 
+## Deploying it 
+The easiest way to install this tool is using the  server less application repository: https://serverlessrepo.aws.amazon.com/applications
 
-```sam deploy --template-file guarana.yaml --stack-name guarana --parameter-overrides bucketName=$YOUR_BUCKET_NAME --capabilities CAPABILITY_IAM```
+Important config options:
 
-Important config options: 
-* bucketName: the name of the bucket in which to store the webhook data
-* bucketPrefix: the prefix to be appended to object paths stored in the S3 bucket. For example, a bucketName of "bucket1" and a prefix "webhooks" will store all inbound HTTP requests under s3://bucket1/webhooks/
+* **bucketName**: the name of the bucket in which to store the webhook data
+* **bucketPrefix**: the prefix to be appended to object paths stored in the S3 bucket. For example, a bucketName of “bucket1” and a prefix “webhooks” will store all inbound HTTP requests under s3://bucket1/webhooks/
+
+## Features
 
 ### It allows a single lambda function to be used across multiple services
-Guarana automatically pass on proxied paths to the S3 destination bucket allowing a single lambda function to be easily used for many services. For example, assuming your lambda function URL is https://123.execute-api.us-east-1.amazonaws.com/Prod you can use https://123.execute-api.us-east-1.amazonaws.com/Prod/stripe.com at Stripe and all its webhooks will be stored as ```s3:///${bucketName}/${bucketPrefix}/stripe.com/${year}/${month}/${day}```
+Guarana automatically pass on proxied paths to the S3 destination bucket allowing a single lambda function to be easily used for many services. For example, assuming your lambda function URL is https://123.execute-api.us-east-1.amazonaws.com/Prod you can use https://123.execute-api.us-east-1.amazonaws.com/Prod/stripe.com at Stripe and all its webhooks will be stored as `s3:///${bucketName}/${bucketPrefix}/stripe.com/${year}/${month}/${day}`
 
-### It captures both the request body as well as relevant metadata 
-For every HTTP request Guarana sees it stores two JSON objects: 
-* metatada.json - containing request metadata such as the HTTP verb and headers
-* contents.$extension - containing the body of the HTTP request using the extension extracted from the provided content type header. If no content type is provided it will default to .txt 
+### It captures both the request body as well as relevant metadata
+For every HTTP request Guarana sees it stores two JSON objects:
+* metadata.json - containing request metadata such as the HTTP verb and headers
+* contents.$extension - containing the body of the HTTP request using the extension extracted from the provided content type header. If no content type is provided it will default to .txt
 
-*example metadata object:*
+_example metadata object:_
 ```js
 {
   "path" : "/test",
