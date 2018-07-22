@@ -30,7 +30,7 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
         bucketName = System.getenv(BUCKET_NAME);
         if (bucketName == null) {
             throw new IllegalStateException("Destination bucket variable not set, please set: " + BUCKET_NAME);
-         }
+        }
 
         initialize();
         persister = new S3BucketPublisher(bucketName);
@@ -106,9 +106,14 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
     }
 
     private String sanitizePath(String requestPath) {
+        if (requestPath == null) {
+            return null;
+        }
+
         if (requestPath.endsWith("/")) {
             requestPath = requestPath.substring(0, requestPath.length() - 1);
         }
+
         if (requestPath.startsWith("/")) {
             requestPath = requestPath.substring(1, requestPath.length());
         }
