@@ -1,5 +1,5 @@
 # Guarana
-Guarana is a [SAM](https://github.com/awslabs/serverless-application-model) packaged [webhook](https://en.wikipedia.org/wiki/Webhook) debugging tool, it captures HTTP requests and saves them Kindly to S3 to help you review/debug them later.
+Guarana is a [SAM](https://github.com/awslabs/serverless-application-model) packaged [webhook](https://en.wikipedia.org/wiki/Webhook) debugging tool, it captures HTTP requests and saves them kindly to S3 to help you review/debug them later.
 
 ## Deploying it 
 The easiest way to install this tool is using the  server less application repository: https://serverlessrepo.aws.amazon.com/applications
@@ -20,7 +20,7 @@ For every HTTP request Guarana sees it stores two JSON objects:
 * contents.$extension - containing the body of the HTTP request using the extension extracted from the provided content type header. If no content type is provided it will default to .txt
 
 _example metadata object:_
-```js
+```
 {
   "path" : "/test",
   "headers" : {
