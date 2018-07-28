@@ -1,11 +1,11 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: A simple webhook troubleshooting endpoint that stores data in S3
+
 Parameters:
   bucketName:
     Description: S3 bucket to store webhook data
     Type: String
-
   bucketPrefix:
     Description: S3 bucket prefix
     Type: String
@@ -20,12 +20,10 @@ Resources:
       Handler: com.uvasoftware.guarana.Handler
       Runtime: java8
       MemorySize: 256
-      Policies: AWSLambdaBasicExecutionRole
       Timeout: 60
       Description: Captures HTTP requests and saves them kindly to S3.
+      AutoPublishAlias: live # enables automatic version tracking
 
-      # enables version tracking:
-      AutoPublishAlias: live
       Environment:
         Variables:
           DESTINATION_BUCKET: !Sub ${bucketName}
@@ -33,8 +31,9 @@ Resources:
           DESTINATION_BUCKET_PREFIX: !Sub ${bucketPrefix}
 
       Policies:
-        - S3CrudPolicy:
-            BucketName: !Sub '${bucketName}'
+      - AWSLambdaBasicExecutionRole
+      - S3CrudPolicy:
+          BucketName: !Sub '${bucketName}'
 
       Events:
         GetResource:
@@ -44,9 +43,9 @@ Resources:
             Method: any
 
 Outputs:
-    ApiURL:
-      Description: "API endpoint URL for Prod environment"
-      Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+  ApiURL:
+    Description: "API endpoint URL for Prod environment"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
 
 
 
