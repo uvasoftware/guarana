@@ -13,11 +13,19 @@ Parameters:
     Default: guarana
     Description: S3 bucket prefix
     Type: String
+  lambdaMemoryLimit:
+    Default: 256
+    Description: Lambda function memory limit in MB
+    Type: Number
+  lambdaTimeOut:
+    Default: 60
+    Description: Lambda function timeout
+    Type: Number
 Resources:
   Guarana:
     Properties:
       AutoPublishAlias: live
-      CodeUri: s3://scanii-assets/sam/guarana/3d08da6d7a41432e86fe2e90424750d4
+      CodeUri: s3://scanii-assets/sam/guarana/06d9ebe910da33b06225e78a8b35b36e
       Description: Captures HTTP requests and saves them kindly to S3.
       Environment:
         Variables:
@@ -31,14 +39,16 @@ Resources:
             Method: any
             Path: /{proxy+}
           Type: Api
-      FunctionName: Guarana-Webhook-Handler
+      FunctionName: uvasoftware-guarana-handler
       Handler: com.uvasoftware.guarana.Handler
-      MemorySize: 256
+      MemorySize:
+        Fn::Sub: ${lambdaMemoryLimit}
       Policies:
       - S3CrudPolicy:
           BucketName:
             Ref: bucketName
       Runtime: java8
-      Timeout: 60
+      Timeout:
+        Fn::Sub: ${lambdaTimeOut}
     Type: AWS::Serverless::Function
 Transform: AWS::Serverless-2016-10-31
