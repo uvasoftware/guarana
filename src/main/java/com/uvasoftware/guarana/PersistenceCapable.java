@@ -1,5 +1,5 @@
 package com.uvasoftware.guarana;
 
 public interface PersistenceCapable {
-    void persist(String path, String contents);
+  void persist(String path, String contents);
 }

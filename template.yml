@@ -2,6 +2,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: A simple webhook troubleshooting endpoint that stores data in S3
 
+# first, the configuration parameters:
 Parameters:
   bucketName:
     Description: S3 bucket to store webhook data
@@ -11,6 +12,7 @@ Parameters:
     Type: String
     Default: guarana
 
+# second, the resources:
 Resources:
   Guarana:
     Type: AWS::Serverless::Function
@@ -31,9 +33,9 @@ Resources:
           DESTINATION_BUCKET_PREFIX: !Sub ${bucketPrefix}
 
       Policies:
-      - AWSLambdaBasicExecutionRole
       - S3CrudPolicy:
-          BucketName: !Sub '${bucketName}'
+          BucketName:
+            Ref: bucketName
 
       Events:
         GetResource:
