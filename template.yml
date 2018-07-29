@@ -11,6 +11,14 @@ Parameters:
     Description: S3 bucket prefix
     Type: String
     Default: guarana
+  lambdaTimeOut:
+    Description: Lambda function timeout
+    Type: Number
+    Default: 60
+  lambdaMemoryLimit:
+    Description: Lambda function memory limit in MB
+    Type: Number
+    Default: 256
 
 # second, the resources:
 Resources:
@@ -18,11 +26,11 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: target/guarana.jar
-      FunctionName: Guarana-Webhook-Handler
+      FunctionName: uvasoftware-guarana-handler
       Handler: com.uvasoftware.guarana.Handler
       Runtime: java8
-      MemorySize: 256
-      Timeout: 60
+      MemorySize: !Sub ${lambdaMemoryLimit}
+      Timeout: !Sub ${lambdaTimeOut}
       Description: Captures HTTP requests and saves them kindly to S3.
       AutoPublishAlias: live # enables automatic version tracking
 
