@@ -17,7 +17,7 @@ Resources:
   Guarana:
     Properties:
       AutoPublishAlias: live
-      CodeUri: s3://scanii/sam/guarana/871682320bb6d29309728ce0625e77b9
+      CodeUri: s3://scanii-assets/sam/guarana/3d08da6d7a41432e86fe2e90424750d4
       Description: Captures HTTP requests and saves them kindly to S3.
       Environment:
         Variables:
@@ -35,10 +35,9 @@ Resources:
       Handler: com.uvasoftware.guarana.Handler
       MemorySize: 256
       Policies:
-      - AWSLambdaBasicExecutionRole
       - S3CrudPolicy:
           BucketName:
-            Fn::Sub: ${bucketName}
+            Ref: bucketName
       Runtime: java8
       Timeout: 60
     Type: AWS::Serverless::Function
