@@ -21,7 +21,10 @@ mvn -q -DskipTests clean package
 ls -lha target/*
 
 # SAM packaging
-sam package --s3-bucket scanii --s3-prefix sam/guarana  --template-file template.yml --output-template-file guarana.yaml || exit 1
+sam package --s3-bucket scanii-assets --s3-prefix sam/guarana  --template-file template.yml --output-template-file guarana.yaml || exit 1
+
+# tagging release:
+
 git add -f guarana.yaml || exit 2
 
 VERSION=$(grep \<version\> pom.xml | xargs | awk -F '[<>]' '{ print $3}')
