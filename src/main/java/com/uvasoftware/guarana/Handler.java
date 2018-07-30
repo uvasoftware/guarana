@@ -74,6 +74,8 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
       metadata.put("functionVersion", context.getFunctionVersion());
 
       final String headerPath = String.join("/", prefix, sanitizePath(request.getPath()), formatter.format(now), context.getAwsRequestId(), "metadata") + ".json";
+
+      // persisting header:
       persister.persist(headerPath, objectMapper.writeValueAsString(metadata));
 
       // handling POST:
@@ -88,12 +90,13 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
             extension = Extensions.resolveOrDefault("none");
           }
           final String bodyPath = String.join("/", prefix, sanitizePath(request.getPath()), formatter.format(now), context.getAwsRequestId(), "content") + extension;
+
+          // persisting body:
           persister.persist(bodyPath, request.getBody());
 
         } else {
           log.log("ignoring base64 encoded body");
         }
-
       }
 
     } catch (JsonProcessingException e) {
@@ -101,7 +104,8 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
     }
 
     APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
-    response.setStatusCode(204);
+    response.setStatusCode(201);
+    response.setBody("Guarana recorded request with id → " + context.getAwsRequestId());
     return response;
   }
 
