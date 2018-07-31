@@ -41,9 +41,12 @@ Resources:
           DESTINATION_BUCKET_PREFIX: !Sub ${bucketPrefix}
 
       Policies:
-      - S3CrudPolicy:
-          BucketName:
-            Ref: bucketName
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - 's3:PutObject'
+              Resource: !Sub 'arn:aws:s3:::${bucketName}/${bucketPrefix}/*'
 
       Events:
         GetResource:
