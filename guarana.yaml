@@ -25,7 +25,7 @@ Resources:
   Guarana:
     Properties:
       AutoPublishAlias: live
-      CodeUri: s3://scanii-assets/sam/guarana/e23accd6cfeacaf06861e35b55b58747
+      CodeUri: s3://scanii-assets/sam/guarana/a184c01eef28c4b09783e7e9e4cfced9
       Description: Captures HTTP requests and saves them kindly to S3.
       Environment:
         Variables:
@@ -44,13 +44,9 @@ Resources:
       MemorySize:
         Fn::Sub: ${lambdaMemoryLimit}
       Policies:
-      - Statement:
-        - Action:
-          - s3:PutObject
-          Effect: Allow
-          Resource:
-            Fn::Sub: arn:aws:s3:::${bucketName}/${bucketPrefix}/*
-        Version: '2012-10-17'
+      - S3CrudPolicy:
+          BucketName:
+            Ref: bucketName
       Runtime: java8
       Timeout:
         Fn::Sub: ${lambdaTimeOut}
