@@ -53,9 +53,9 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
   @Override
   public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
 
-    LambdaLogger log = context.getLogger();
-    log.log(String.format("processing event with path: [%s] and method: [%s]\n", request.getPath(), request.getHttpMethod()));
-    log.log(String.format("using bucket [%s] with prefix [%s]\n", bucketName, prefix));
+    LambdaLogger logger = context.getLogger();
+    logger.log(String.format("processing event with path: [%s] and method: [%s]\n", request.getPath(), request.getHttpMethod()));
+    logger.log(String.format("using bucket [%s] with prefix [%s]\n", bucketName, prefix));
 
     // adding temporal path elements:
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY/MM/dd");
@@ -85,7 +85,7 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
           if (request.getHeaders().containsKey(CONTENT_TYPE_HEADER)) {
             String contentType = request.getHeaders().get(CONTENT_TYPE_HEADER);
             extension = Extensions.resolveOrDefault(contentType);
-            log.log(String.format("using extension [%s] for content type [%s]\n", extension, contentType));
+            logger.log(String.format("using extension [%s] for content type [%s]\n", extension, contentType));
           } else {
             extension = Extensions.resolveOrDefault("none");
           }
@@ -95,7 +95,7 @@ public class Handler implements RequestHandler<APIGatewayProxyRequestEvent, APIG
           persister.persist(bodyPath, request.getBody());
 
         } else {
-          log.log("ignoring base64 encoded body");
+          logger.log("ignoring base64 encoded body");
         }
       }
 
