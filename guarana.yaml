@@ -25,7 +25,7 @@ Resources:
   Guarana:
     Properties:
       AutoPublishAlias: live
-      CodeUri: s3://scanii-assets/sam/guarana/a184c01eef28c4b09783e7e9e4cfced9
+      CodeUri: s3://scanii-assets/sam/guarana/f3bd5acdd77edae75b4a039bc009f55c
       Description: Captures HTTP requests and saves them kindly to S3.
       Environment:
         Variables:
