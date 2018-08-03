@@ -17,7 +17,7 @@ Guarana automatically pass on proxied paths to the S3 destination bucket allowin
 ### It captures both the request body as well as relevant metadata
 For every HTTP request Guarana sees it stores two JSON objects:
 * metadata.json - containing request metadata such as the HTTP verb and headers
-* contents.$extension - containing the body of the HTTP request using the extension extracted from the provided content type header. If no content type is provided it will default to .txt
+* contents.json - containing the body of the HTTP request using the extension extracted from the provided content type header. If no content type is provided it will default to .txt
 
 _example metadata object:_
 ```
@@ -46,5 +46,13 @@ _example metadata object:_
   "functionName" : "guarana-Guarana-S91VVGJ7WH0I",
   "id" : "f096e2f8-4648-11e8-a17b-2308d7d30a46",
   "queryString" : null
+}
+```
+
+
+_example content object:_
+```
+{
+  "hellow" : "world",
 }
 ```
