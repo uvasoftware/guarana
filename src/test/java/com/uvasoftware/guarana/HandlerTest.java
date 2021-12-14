@@ -1,10 +1,12 @@
 package com.uvasoftware.guarana;
 
 import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -25,19 +27,19 @@ class HandlerTest {
     event.getHeaders().put("h1", "v1");
 
     Context ctx = mock(Context.class);
-    when(ctx.getLogger()).thenReturn(System.out::println);
+    when(ctx.getLogger()).thenReturn(Mockito.mock(LambdaLogger.class));
     when(ctx.getAwsRequestId()).thenReturn("1234");
 
-    PersistenceCapable persister = mock(PersistenceCapable.class);
+    PersistenceCapable persisted = mock(PersistenceCapable.class);
 
-    Handler handler = new Handler(persister);
+    Handler handler = new Handler(persisted);
     APIGatewayProxyResponseEvent r = handler.handleRequest(event, ctx);
     Assertions.assertNotNull(r.getBody());
 
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY/MM/dd");
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
     LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
 
-    verify(persister, times(1)).persist("guarana/foo/bar/" + formatter.format(now) + "/1234/metadata.json", "{\n" +
+    verify(persisted, times(1)).persist("guarana/foo/bar/" + formatter.format(now) + "/1234/metadata.json", "{\n" +
       "  \"path\" : \"/foo/bar\",\n" +
       "  \"headers\" : {\n" +
       "    \"h1\" : \"v1\"\n" +
@@ -48,7 +50,7 @@ class HandlerTest {
       "  \"id\" : \"1234\",\n" +
       "  \"queryString\" : null\n" +
       "}");
-    verify(persister, times(1)).persist("guarana/foo/bar/" + formatter.format(now) + "/1234/content.txt", "hello world");
+    verify(persisted, times(1)).persist("guarana/foo/bar/" + formatter.format(now) + "/1234/content.txt", "hello world");
   }
 
   @Test
@@ -65,7 +67,7 @@ class HandlerTest {
 
 
     Context ctx = mock(Context.class);
-    when(ctx.getLogger()).thenReturn(System.out::println);
+    when(ctx.getLogger()).thenReturn(Mockito.mock(LambdaLogger.class));
     when(ctx.getAwsRequestId()).thenReturn("1234");
 
     PersistenceCapable persister = mock(PersistenceCapable.class);
@@ -73,7 +75,7 @@ class HandlerTest {
     Handler handler = new Handler(persister);
     handler.handleRequest(event, ctx);
 
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY/MM/dd");
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
     LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
 
     verify(persister, times(1)).persist("guarana/foo/bar/" + formatter.format(now) + "/1234/content.js", "{\"foo\" : \"bar\"");
@@ -95,7 +97,7 @@ class HandlerTest {
 
 
     Context ctx = mock(Context.class);
-    when(ctx.getLogger()).thenReturn(System.out::println);
+    when(ctx.getLogger()).thenReturn(Mockito.mock(LambdaLogger.class));
     when(ctx.getAwsRequestId()).thenReturn("1234");
 
     PersistenceCapable persister = mock(PersistenceCapable.class);
@@ -103,7 +105,7 @@ class HandlerTest {
     Handler handler = new Handler(persister);
     handler.handleRequest(event, ctx);
 
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY/MM/dd");
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
     LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
 
     verify(persister, times(1)).persist("guarana/foo/bar/" + formatter.format(now) + "/1234/metadata.json", "{\n" +
@@ -130,7 +132,7 @@ class HandlerTest {
     event.setHeaders(new HashMap<>());
 
     Context ctx = mock(Context.class);
-    when(ctx.getLogger()).thenReturn(System.out::println);
+    when(ctx.getLogger()).thenReturn(Mockito.mock(LambdaLogger.class));
     when(ctx.getAwsRequestId()).thenReturn("1234");
 
     PersistenceCapable persister = mock(PersistenceCapable.class);
@@ -138,7 +140,7 @@ class HandlerTest {
     Handler handler = new Handler(persister);
     handler.handleRequest(event, ctx);
 
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY/MM/dd");
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
     LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
 
     verify(persister, times(1)).persist(eq("guarana/Prod/test/" + formatter.format(now) + "/1234/metadata.json"), anyString());
