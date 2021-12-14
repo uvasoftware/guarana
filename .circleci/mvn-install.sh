@@ -3,7 +3,7 @@ export MVN_DOWNLOAD="http://mirrors.ocf.berkeley.edu/apache//maven/maven-3/3.5.3
 
 echo "Downloading maven from: ${MVN_DOWNLOAD}"
 
-cd /tmp
+cd /tmp || exit
 wget -q ${MVN_DOWNLOAD}
 tar -zxvf apache-maven* &>/dev/null
 mv apache-maven-*/ /opt
