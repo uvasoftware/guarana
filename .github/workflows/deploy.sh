@@ -1,17 +1,5 @@
 #!/usr/bin/env bash
 
-echo "installing dependencies"
-apt-get install -qqy openjdk-8-jdk-headless wget
-update-ca-certificates -f &>/dev/null
-
-# maven
-source ./.circleci/mvn-install.sh
-
-# installing AWS CLI
-apt-get install -qqy python-pip && pip install awscli aws-sam-cli
-
-cd ~/ci || exit
-
 # removing snapshot marker:
 mvn -q build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion} versions:commit
 
