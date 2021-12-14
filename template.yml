@@ -28,7 +28,7 @@ Resources:
       CodeUri: target/guarana.jar
       FunctionName: uvasoftware-guarana-handler
       Handler: com.uvasoftware.guarana.Handler
-      Runtime: java8
+      Runtime: java11
       MemorySize: !Sub ${lambdaMemoryLimit}
       Timeout: !Sub ${lambdaTimeOut}
       Description: Captures HTTP requests and saves them kindly to S3.
